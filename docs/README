@@ -1,0 +1,95 @@
+Introduction: Intel PMWatch is a tool that monitors and reports the behavior of the Intel® Optane™ DC persistent memory.
+It consists of a data collector.
+
+Pre-requisites:
+Linux OS - Fedora or RHEL with nvdimm driver support
+Intel® Optane™ DC persistent memory firmware version: 01.01.00.5142 and newer
+
+PMWatch instructions:
+Run "source pmw_vars.sh" to set up the environment before using the tool.
+
+Tools Usage:
+pmwatch "<sampling interval>" "<number of samples>" -f outputfile.csv
+
+Example: "pmwatch 1 100" reads the counters every 1 second 100 times.
+
+The output of PMWatch is in a CSV format listing the metrics for each DIMM on the system and outputs the counts for each interval.
+
+Explanation of metrics:
+
+Memory performance metrics:
+bytes_read (derived)   : number of bytes transacted by the read operations
+bytes_written (derived): number of bytes transacted by the write operations
+Note: The total number of bytes transacted in any sample is computed as bytes_read (derived) + 2 * bytes_written (derived).
+
+Formula:
+bytes_read   : (read_64B_ops_received - write_64B_ops_received) * 64
+bytes_written: write_64B_ops_received * 64
+
+
+read_hit_ratio (derived) : measures the efficiency of the buffer in the read path. Range of 0.0 - 0.75.
+write_hit_ratio (derived): measures the efficiency of the buffer in the write path. Range of 0.0 - 0.1.
+
+0.75   : indicates 100% sequential write traffic
+> 0.75 : indicates writing to 64B addresses that are still in the write buffer (never had to go to media)
+1 or ~1: likely writing to a specific address or small range of addresses (fitting in write buffer) for long periods of time.
+
+Formula:
+read_hit_ratio : (cpu_read_ops - media_read_ops) / cpu_read_ops
+write_hit_ratio: (cpu_write_ops - media_write_ops) / cpu_write_ops
+
+
+media_read_ops (derived) :
+media_write_ops (derived):
+Number of read and write operations performed to the physical media. Each operation transacts a 256 bytes operation.
+
+Formula:
+media_read_ops : (read_64B_ops_received - write_64B_ops_received) / 4
+media_write_ops: write_64B_ops_received / 4
+
+
+read_64B_ops_received :
+write_64B_ops_received:
+Number of read and write operations performed from/to the physical media. Each operation transacts a 64byte operation. These operations includes commands transacted for maintenance as well as the commands transacted by the CPU.
+
+
+cpu_read_ops :
+cpu_write_ops:
+Number of read and write operations received from the CPU (memory controller), for the Memory Mode and AppDirect Mode partitions.
+
+Health Information:
+health_status:
+Overall health summary.
+
+Value: Health Status
+0: Normal
+1: Non-critical
+2: Critical
+3: Fatal
+
+lifespan_used:
+The module’s used life as a percentage value of factory expected like span.
+
+lifespan_remaining:
+The module’s remaining life as a percentage value of factory expected like span.
+
+power_on_time:
+The lifetime the DIMM has been powered on in seconds.
+
+uptime:
+The current uptime of the DIMM for the current power cycle in seconds.
+
+last_shutdown_time:
+The time the system was last shutdown. The time is represented in epoch (seconds).
+
+media_temp :
+The media’s current temperature in degrees Celsius.
+
+controller_temp :
+The controller’s current temperature in degrees Celsius.
+
+max_media_temp :
+The media’s the highest temperature reported in degrees Celsius.
+
+max_controller_temp :
+The controller’s highest temperature reported in degrees Celsius.

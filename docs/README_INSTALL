@@ -1,0 +1,7 @@
+Intel PMWatch
+
+How to install the tool:
+$ ./install-pmw
+
+How to set up environment:
+$ source /opt/intel/pmwatch/pmw_vars.sh

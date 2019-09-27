@@ -1,0 +1,164 @@
+#!/bin/bash
+
+ # MIT License
+ #
+ # Copyright (C) 2017 - 2019 Intel Corporation. All rights reserved.
+ #
+ # Permission is hereby granted, free of charge, to any person obtaining a
+ # copy of this software and associated documentation files (the "Software"),
+ # to deal in the Software without restriction, including without limitation
+ # the rights to use, copy, modify, merge, publish, distribute, sublicense,
+ # and/or sell copies of the Software, and to permit persons to whom the
+ # Software is furnished to do so, subject to the following conditions:
+ #
+ # The above copyright notice and this permission notice shall be included in
+ # all copies or substantial portions of the Software.
+ #
+ # THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ # IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ # FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ # AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+ # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+ # DEALINGS IN THE SOFTWARE.
+
+PACKAGE_NAME_REGEX="pmwatch_[0-9\.]+[_a-zA-Z]*.tar.bz2"
+TARBALL=$( ls | grep -E ${PACKAGE_NAME_REGEX} )
+if [ ! -f "${TARBALL}" ] ; then
+    echo ""
+    echo "Package tarball is not available at the install script location!"
+    echo "Run the install script from the location of package tarball"
+    echo ""
+
+    exit 150
+fi
+
+BIN_DIR="bin64"
+LIB_DIR="lib64"
+INSTALL_BASE="/opt/intel"
+PMWATCH_VER=${TARBALL:8:5}
+PMWATCH_BASE_NAME=${TARBALL:0:-8}
+
+print_usage_and_exit()
+{
+    err=${1:-0}
+    echo ""
+    echo "Usage: $0 [ options ]"
+    echo ""
+    echo " where \"options\" are the following:"
+    echo ""
+    echo "    -c | --custom-install-loc"
+    echo "      installs the tool at a user-specified location"
+    echo ""
+
+    exit $err
+}
+
+while [ $# -gt 0 ] ; do
+    case "$1" in
+        -c | --custom-install-loc)
+            custom_install_loc=1
+            shift
+            INSTALL_BASE="$1"
+            ;;
+        --install-only-binary)
+            install_only_binary=1
+            ;;
+        *)
+            echo ""
+            echo "ERROR: unrecognized option \"$1\""
+            print_usage_and_exit 151
+            ;;
+    esac
+    shift
+done
+
+if [ ! -d "${INSTALL_BASE}" ] ; then
+    sudo mkdir ${INSTALL_BASE}
+    if [ $? -ne 0 ] ; then
+        echo "Unable to create directory ${INSTALL_BASE}. Exiting..."
+        exit 152
+    fi
+fi
+
+INSTALL_DIR="${INSTALL_BASE}/${PMWATCH_BASE_NAME}"
+INSTALL_DIR_SOFTLINK="${INSTALL_BASE}/pmwatch"
+
+sudo sh -c "tar --warning=no-timestamp -xf ${TARBALL} -C ${INSTALL_BASE}"
+sudo sh -c "chown root -R ${INSTALL_DIR}"
+if [ $? -ne 0 ] ; then
+    echo
+    echo "chown command failed!"
+    echo
+    sudo sh -c "rm -rf ${INSTALL_DIR}"
+    exit 1
+fi
+sudo sh -c "chgrp root -R ${INSTALL_DIR}"
+if [ $? -ne 0 ] ; then
+    echo
+    echo "chgrp command failed!"
+    echo
+    sudo sh -c "rm -rf ${INSTALL_DIR}"
+    exit 1
+fi
+
+if [ -L ${INSTALL_DIR_SOFTLINK} ] ; then
+    sudo sh -c "unlink ${INSTALL_DIR_SOFTLINK}"
+fi
+sudo sh -c "ln -s ${INSTALL_DIR} ${INSTALL_DIR_SOFTLINK}"
+
+
+if [ -n "${install_only_binary}" ] ; then
+    sudo sh -c "rm -rf ${INSTALL_DIR}/PMWatch_User_Guide.pdf ${INSTALL_DIR}/README ${INSTALL_DIR}/scripts > /dev/null 2>&1"
+fi
+
+# identify the OS
+os="default"
+cat /etc/*release | grep "SUSE" > /dev/null 2>&1
+if [ $? -eq 0 ] ; then
+    os="suse"
+fi
+cat /etc/*release | grep "Ubuntu" > /dev/null 2>&1
+if [ $? -eq 0 ] ; then
+    os="ubuntu"
+fi
+
+SYSTEM_LIB64="lib64"
+LIBSAFEC_RPM_URL="https://copr.fedorainfracloud.org/coprs/jhli/safeclib/"
+# RHEL, CentOS: https://copr-be.cloud.fedoraproject.org/results/jhli/safeclib/epel-7-x86_64/00773240-libsafec/ (libsafec-03032018-2.0.g570fa5.el7.x86_64.rpm)
+# Ubuntu: http://ppa.launchpad.net/jhli/libsafec/ubuntu/pool/main/libs/libsafec/
+# Fedora: from system repo or
+# Fedora 28: https://copr-be.cloud.fedoraproject.org/results/jhli/safeclib/fedora-28-x86_64/00773240-libsafec/ (libsafec-03032018-2.0.g570fa5.fc28.x86_64.rpm)
+# Fedora 27: https://copr-be.cloud.fedoraproject.org/results/jhli/safeclib/fedora-27-x86_64/00773240-libsafec/ (libsafec-03032018-2.0.g570fa5.fc27.x86_64.rpm)
+# may be devel packages too
+if [ "${os}" = "ubuntu" ] ; then
+    SYSTEM_LIB64="usr/lib"
+    LIBSAFEC_RPM_URL="https://launchpad.net/~jhli/+archive/ubuntu/libsafec or http://ppa.launchpad.net/jhli/libsafec/ubuntu/pool/main/libs/libsafec/"
+fi
+if [ "${os}" = "suse" ] ; then
+    SYSTEM_LIB64="usr/lib64"
+    LIBSAFEC_RPM_URL="https://build.opensuse.org/package/show/home:jhli/safeclib"
+fi
+
+# check for missing dependencies
+tmp=`ldd ${INSTALL_DIR}/${BIN_DIR}/pmwatch | grep "not found"`
+if [ $? -eq 0 ] ; then
+    echo ""
+    dependent_libs=`ldd ${INSTALL_DIR}/${BIN_DIR}/pmwatch | grep "not found" | cut -d"=" -f1`
+    echo "pmwatch has dependency on following libs: ${dependent_libs}"
+    echo "Please install the relevant libraries and re-install pmwatch."
+    echo ""
+    echo "Depedency resolution tips:"
+    echo "    Install ndctl tool to resolve libndctl.so and libdaxctl.so dependencies."
+    echo "    Install libsafec package from ${LIBSAFEC_RPM_URL} if not available in the system repo."
+
+    sudo sh -c "rm -rf ${INSTALL_DIR}"
+
+    exit 153
+else
+    echo ""
+    echo "pmwatch ${PMWATCH_VER} is installed at ${INSTALL_DIR_SOFTLINK}."
+    echo "Execute \"source ${INSTALL_DIR_SOFTLINK}/pmw_vars.sh\" to start using the tool."
+fi
+
+echo ""

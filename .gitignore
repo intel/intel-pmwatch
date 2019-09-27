@@ -1,0 +1,14 @@
+INSTALL
+.deps/
+.libs/
+Makefile
+Makefile.in
+aclocal.m4
+autom4te.cache/
+bin64/
+config.log
+config.status
+configure
+libtool
+pmwatch
+*.la
