@@ -14,24 +14,24 @@ The information about features and options available in the tool can be found at
 **Check *[Dependencies](#dependencies)* section to resolve the dependencies.**
 
 > $ ./autogen.sh<br/>
-> $ ./configure [--with-libipmctl=\<path to libipmctl library> --with-libipmctl-inc=\<path to libipmctl header files> --prefix=\$HOME/pmwatch --bindir=\$HOME/pmwatch/bin64 --libdir=\$HOME/pmwatch/lib64]<br/>
+> $ ./configure [--with-libipmctl=\<path_to_libipmctl> --with-libipmctl-inc=\<path_to_libipmctl_header_files> --prefix=\$HOME/pmwatch --bindir=\$HOME/pmwatch/bin64 --libdir=\$HOME/pmwatch/lib64]<br/>
 > $ make<br/>
 > $ make -j install
 
-The parameters for configure are optional.
-**If you are building PMWatch to build [collectd (dcpmm plugin)](https://github.com/collectd/collectd), make sure to use `--libdir=\<install_path>/lib64`.**
+The parameters for configure are optional.<br/>
+**If you are building PMWatch for [collectd (dcpmm plugin)](https://github.com/collectd/collectd) dependency, make sure to use `--libdir=<install_path>/lib64`.**
 
 ## Using scripts to build and create install package
 You can *also* use the scripts available for build and package creation.
 
-> $ ./prepare_pmwatch_release.sh M=<major_version> m=<minor_version> u=<update_num> with-libipmctl=<path to libipmctl> with-libipmctl-inc=<path to libipmctl header files> os=linux -r
+> $ ./prepare_pmwatch_release.sh M=<major_version> m=<minor_version> u=<update_num> with-libipmctl=<path_to_libipmctl> with-libipmctl-inc=<path_to_libipmctl_header_files> os=linux -r
 
 Check *[pmw_version.h](https://github.com/intel/intel-pmwatch/blob/master/src/inc/pmw_version.h)* to obtain major, minor version and update number.
 
 ### Build
 Standalone build script.
 
-> $ ./build_pmwatch.sh -all with-libipmctl=<path to libipmctl> with-libipmctl-inc=<path to libipmctl header files> os=linux
+> $ ./build_pmwatch.sh -all with-libipmctl=<path_to_libipmctl> with-libipmctl-inc=<path_to_libipmctl_header_files> os=linux
 
 ### Package
 Standalone packaging script.
@@ -61,9 +61,9 @@ Perform the following steps to install the tool dependencies.
 
 > $ wget http://ppa.launchpad.net/jhli/libsafec/ubuntu/pool/main/libs/libsafec/libsafec3_3.3-1_amd64.deb<br/>
 > $ dpkg -i libsafec3_3.3-1_amd64.deb<br/>
-> $ dpkg -i libdaxctl-dev_*.deb<br/>
-> $ dpkg -i libndctl-dev_*.deb<br/>
-> $ dpkg -i libipmctl-dev_*.deb
+> $ dpkg -i libdaxctl-dev_\*.deb<br/>
+> $ dpkg -i libndctl-dev_\*.deb<br/>
+> $ dpkg -i libipmctl-dev_\*.deb
 
 ### Build tools
 Install the following build tools:
