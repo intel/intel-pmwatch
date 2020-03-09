@@ -109,7 +109,7 @@ struct HEALTH_INFO_PAGE_NODE_S {
     unsigned char rsvd2;
     unsigned char media_temp[2];
     unsigned char controller_temp[2];
-    unsigned char rsvd3[12];
+    unsigned char rsvd3[16];
     unsigned char vendor_data_size[4];
     unsigned char rsvd4[8];
     unsigned char power_on_time[8];
