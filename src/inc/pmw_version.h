@@ -32,7 +32,7 @@
 #define PRODUCT_NAME   "Intel(R) PMWatch"
 
 #define MAJOR_VERSION  3
-#define MINOR_VERSION  0
+#define MINOR_VERSION  2
 #define UPDATE_VERSION 0
 #if UPDATE_VERSION > 0
 #define UPDATE_STRING  " Update "STRINGIFY(UPDATE_VERSION)
