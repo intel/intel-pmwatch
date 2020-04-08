@@ -18,7 +18,7 @@ libpmwcollect_la_LIBADD = -lipmctl -lpthread
 libpmwcollect_la_CFLAGS = ${NEW_CFLAGS} $(AM_CFLAGS) $(BUILD_WITH_LIBIPMCTL_CFLAGS)
 endif
 libpmwapi_la_SOURCES = src/pmw_api.c
-libpmwapi_la_LIBADD = -L./.libs -lpmwcollect
+libpmwapi_la_LIBADD = -L./.libs libpmwcollect.la
 libpmwapi_la_CFLAGS = ${NEW_CFLAGS} $(AM_CFLAGS) $(BUILD_WITH_LIBIPMCTL_CFLAGS)
 
 include_HEADERS =  src/inc/pmw_api.h src/inc/pmw_struct.h
