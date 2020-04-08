@@ -114,7 +114,7 @@ if [[ -n "${RUN_MAKE}" ]] ; then
     echo "***************************************"
     echo "Executing make..."
     echo "***************************************"
-    make | tee makelog.log
+    make -j 10 | tee makelog.log
     res=$?
     cat makelog.log | grep "Nothing to be done for 'all'" >> /dev/null 2>&1
     res_grep=$?
