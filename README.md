@@ -58,4 +58,5 @@ Perform the following steps to install the tool dependencies.
 
 ### Build tools
 Install the following build tools:
-> autoconf, automake, flex, bison, libtool, pkg-config
+> autoconf, automake, flex, bison, libtool, pkg-config, libkmod-dev,
+> libudev-dev, uuid-dev
