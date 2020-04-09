@@ -46,21 +46,18 @@ PMWatch is dependent on [libipmctl](https://github.com/intel/ipmctl).
 Perform the following steps to install the tool dependencies.
 
 #### Fedora
-> $ yum install daxctl-devel.x86_64 ndctl-devel.x86_64 libipmctl-devel.x86_64 libsafec-devel.x86_64
+> $ yum install daxctl-devel.x86_64 ndctl-devel.x86_64 libipmctl-devel.x86_64
 
 #### CentOS, RHEL
 > $ wget https://copr-be.cloud.fedoraproject.org/results/jhli/ipmctl/epel-7-x86_64/00874029-ipmctl/libipmctl-devel-02.00.00.3446-1.el7.x86_64.rpm<br/>
-> $ wget https://copr-be.cloud.fedoraproject.org/results/jhli/safeclib/epel-7-x86_64/00773240-libsafec/libsafec-03032018-2.0.g570fa5.el7.x86_64.rpm<br/>
 > $ yum install ndctl-libs.x86_64<br/>
-> $ rpm -ivh libipmctl-devel-02.00.00.3446-1.el7.x86_64.rpm libsafec-03032018-2.0.g570fa5.el7.x86_64.rpm
+> $ rpm -ivh libipmctl-devel-02.00.00.3446-1.el7.x86_64.rpm
 
 #### Ubuntu
 * Download appropriate *libdaxctl-dev_\*.deb* https://packages.ubuntu.com/search?keywords=daxctl-dev.
 * Download appropriate *libndctl-dev_\*.deb* package from https://packages.ubuntu.com/search?keywords=ndctl-dev.
 * Download appropriate *libipmctl-dev_\*.deb* package from https://packages.ubuntu.com/search?keywords=libipmctl-dev.
 
-> $ wget http://ppa.launchpad.net/jhli/libsafec/ubuntu/pool/main/libs/libsafec/libsafec3_3.3-1_amd64.deb<br/>
-> $ dpkg -i libsafec3_3.3-1_amd64.deb<br/>
 > $ dpkg -i libdaxctl-dev_\*.deb<br/>
 > $ dpkg -i libndctl-dev_\*.deb<br/>
 > $ dpkg -i libipmctl-dev_\*.deb

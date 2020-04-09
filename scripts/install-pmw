@@ -123,23 +123,6 @@ if [ $? -eq 0 ] ; then
     os="ubuntu"
 fi
 
-SYSTEM_LIB64="lib64"
-LIBSAFEC_RPM_URL="https://copr.fedorainfracloud.org/coprs/jhli/safeclib/"
-# RHEL, CentOS: https://copr-be.cloud.fedoraproject.org/results/jhli/safeclib/epel-7-x86_64/00773240-libsafec/ (libsafec-03032018-2.0.g570fa5.el7.x86_64.rpm)
-# Ubuntu: http://ppa.launchpad.net/jhli/libsafec/ubuntu/pool/main/libs/libsafec/
-# Fedora: from system repo or
-# Fedora 28: https://copr-be.cloud.fedoraproject.org/results/jhli/safeclib/fedora-28-x86_64/00773240-libsafec/ (libsafec-03032018-2.0.g570fa5.fc28.x86_64.rpm)
-# Fedora 27: https://copr-be.cloud.fedoraproject.org/results/jhli/safeclib/fedora-27-x86_64/00773240-libsafec/ (libsafec-03032018-2.0.g570fa5.fc27.x86_64.rpm)
-# may be devel packages too
-if [ "${os}" = "ubuntu" ] ; then
-    SYSTEM_LIB64="usr/lib"
-    LIBSAFEC_RPM_URL="https://launchpad.net/~jhli/+archive/ubuntu/libsafec or http://ppa.launchpad.net/jhli/libsafec/ubuntu/pool/main/libs/libsafec/"
-fi
-if [ "${os}" = "suse" ] ; then
-    SYSTEM_LIB64="usr/lib64"
-    LIBSAFEC_RPM_URL="https://build.opensuse.org/package/show/home:jhli/safeclib"
-fi
-
 # check for missing dependencies
 tmp=`ldd ${INSTALL_DIR}/${BIN_DIR}/pmwatch | grep "not found"`
 if [ $? -eq 0 ] ; then
@@ -150,7 +133,6 @@ if [ $? -eq 0 ] ; then
     echo ""
     echo "Depedency resolution tips:"
     echo "    Install ndctl tool to resolve libndctl.so and libdaxctl.so dependencies."
-    echo "    Install libsafec package from ${LIBSAFEC_RPM_URL} if not available in the system repo."
 
     sudo sh -c "rm -rf ${INSTALL_DIR}"
 
