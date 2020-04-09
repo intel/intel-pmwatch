@@ -53,14 +53,8 @@ Perform the following steps to install the tool dependencies.
 > $ yum install ndctl-libs.x86_64<br/>
 > $ rpm -ivh libipmctl-devel-02.00.00.3446-1.el7.x86_64.rpm
 
-#### Ubuntu
-* Download appropriate *libdaxctl-dev_\*.deb* https://packages.ubuntu.com/search?keywords=daxctl-dev.
-* Download appropriate *libndctl-dev_\*.deb* package from https://packages.ubuntu.com/search?keywords=ndctl-dev.
-* Download appropriate *libipmctl-dev_\*.deb* package from https://packages.ubuntu.com/search?keywords=libipmctl-dev.
-
-> $ dpkg -i libdaxctl-dev_\*.deb<br/>
-> $ dpkg -i libndctl-dev_\*.deb<br/>
-> $ dpkg -i libipmctl-dev_\*.deb
+#### Ubuntu, Debian
+> $ apt install libdaxctl-dev libndctl-dev libipmctl-dev
 
 ### Build tools
 Install the following build tools:
