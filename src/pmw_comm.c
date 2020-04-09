@@ -578,13 +578,13 @@ pmw_comm_Check_PreR_FW (
             free(fw_api_version);
             return 1;
         }
-        status = STRNCPY_SAFE(fw_api_major_ver, sizeof(fw_api_major_ver), token, strlen(token));
+        status = STRNCPY_SAFE(fw_api_major_ver, sizeof(fw_api_major_ver), token);
         if (status != NVM_SUCCESS) {
             free(fw_api_version);
             return status;
         }
         while(token) {
-            status = STRNCPY_SAFE(fw_api_minor_ver, sizeof(fw_api_minor_ver), token, strlen(token));
+            status = STRNCPY_SAFE(fw_api_minor_ver, sizeof(fw_api_minor_ver), token);
             if (status != NVM_SUCCESS) {
                 free(fw_api_version);
                 return status;

@@ -51,19 +51,16 @@ NVM_UINT32
 PMW_UTILS_Strncpy_Safe (
     char       *dst,
     size_t      dst_size,
-    const char *src,
-    size_t      count
+    const char *src
 )
 {
-    size_t to_copy;
-
     if (!dst || !src) {
         fprintf(stderr, "ERROR: NULL value for strncpy operation\n");
 
         return 1;
     }
 
-    to_copy = (count < strlen(src)) ? count : strlen(src);
+    size_t to_copy = strlen(src);
 
     if (to_copy >= dst_size) {
         fprintf(stderr, "ERROR: (strncpy) buffer too small\n");
@@ -71,7 +68,7 @@ PMW_UTILS_Strncpy_Safe (
         return 1;
     }
 
-    strncpy(dst, src, to_copy);
+    memcpy(dst, src, to_copy);
     dst[to_copy] = '\0';
 
     return NVM_SUCCESS;
@@ -81,11 +78,10 @@ NVM_UINT32
 PMW_UTILS_Strncat_Safe(
     char       *dst,
     size_t      dst_size,
-    const char *src,
-    size_t      count
+    const char *src
 )
 {
-    size_t to_copy, len;
+    size_t to_copy, copy_at;
 
     if (!dst || !src) {
         fprintf(stderr, "ERROR: NULL value for strncat operation\n");
@@ -93,18 +89,17 @@ PMW_UTILS_Strncat_Safe(
         return 1;
     }
 
-    to_copy = (count < strlen(src)) ? count : strlen(src);
-    len = to_copy + strlen(dst);
+    to_copy = strlen(src);
+    copy_at = strlen(dst);
 
-    if (len >= dst_size) {
+    if (to_copy + copy_at >= dst_size) {
         fprintf(stderr, "ERROR: (strncat) buffer too small\n");
 
         return 1;
     }
-    else {
-        strncat(dst, src, to_copy);
-        dst[len] = '\0';
-    }
+
+    memcpy(dst + copy_at, src, to_copy);
+    dst[to_copy + copy_at] = '\0';
 
     return NVM_SUCCESS;
 }
