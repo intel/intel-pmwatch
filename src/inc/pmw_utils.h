@@ -139,16 +139,14 @@ PMW_API NVM_UINT32
 PMW_UTILS_Strncpy_Safe (
     char       *dst,
     size_t      dst_size,
-    const char *src,
-    size_t      count
+    const char *src
 );
 
 PMW_API NVM_UINT32
 PMW_UTILS_Strncat_Safe(
     char       *dst,
     size_t      dst_size,
-    const char *src,
-    size_t      count
+    const char *src
 );
 
 PMW_API void

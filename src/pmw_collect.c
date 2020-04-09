@@ -90,7 +90,7 @@ PMW_COLLECT_Set_Global_Vars (
     output_format_two     = l_output_format_two;
     collect_health        = l_collect_health;
 
-    ret_val = STRNCPY_SAFE(DELIMITER, sizeof(DELIMITER), l_delim, strlen(l_delim));
+    ret_val = STRNCPY_SAFE(DELIMITER, sizeof(DELIMITER), l_delim);
 
     return ret_val;
 }
@@ -1224,7 +1224,7 @@ PMW_COLLECT_Start_Collection (
         return 1;
     }
 
-    ret_code = STRNCPY_SAFE(filename, SMALL_STR_LEN, "/dev/null", strlen("/dev/null"));
+    ret_code = STRNCPY_SAFE(filename, SMALL_STR_LEN, "/dev/null");
     if (ret_code != NVM_SUCCESS) {
         pthread_mutex_lock(&buffer_lock);
         collection_done = 1;

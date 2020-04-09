@@ -92,7 +92,7 @@ pmwatch_parse_cli (
     char      extension[] = ".csv";
     char      file_mode[] = "w";
 
-    ret_val = STRNCPY_SAFE(DELIMITER_M, sizeof(DELIMITER_M), SEMICOLON_M, sizeof(SEMICOLON_M));
+    ret_val = STRNCPY_SAFE(DELIMITER_M, sizeof(DELIMITER_M), SEMICOLON_M);
     if (ret_val != NVM_SUCCESS) {
         return ret_val;
     }
@@ -172,7 +172,7 @@ pmwatch_parse_cli (
                 return NVM_ERR_INVALIDPARAMETER;
             }
 
-            ret_val = STRNCPY_SAFE(file_name, SMALL_STR_LEN, argv[itr + 1], strlen(argv[itr + 1]));
+            ret_val = STRNCPY_SAFE(file_name, SMALL_STR_LEN, argv[itr + 1]);
             if (ret_val != NVM_SUCCESS) {
                 return ret_val;
             }
@@ -185,22 +185,22 @@ pmwatch_parse_cli (
                 return NVM_ERR_INVALIDPARAMETER;
             }
 
-            ret_val = STRNCPY_SAFE(file_name, SMALL_STR_LEN, argv[itr + 1], strlen(argv[itr + 1]));
+            ret_val = STRNCPY_SAFE(file_name, SMALL_STR_LEN, argv[itr + 1]);
             if (ret_val != NVM_SUCCESS) {
                 return ret_val;
             }
-            ret_val = STRNCPY_SAFE(file_mode, sizeof(file_mode), "a", strlen("a"));
+            ret_val = STRNCPY_SAFE(file_mode, sizeof(file_mode), "a");
             if (ret_val != NVM_SUCCESS) {
                 return ret_val;
             }
             file_logging = 1;
         }
         else if (strcmp(argv[itr], "-td") == 0 || strcmp(argv[itr], "--tab-delimited") == 0) {
-            ret_val = STRNCPY_SAFE(extension, sizeof(extension), ".tsv", strlen(".tsv"));
+            ret_val = STRNCPY_SAFE(extension, sizeof(extension), ".tsv");
             if (ret_val != NVM_SUCCESS) {
                 return ret_val;
             }
-            ret_val = STRNCPY_SAFE(DELIMITER_M, sizeof(DELIMITER_M), TAB_M, sizeof(TAB_M));
+            ret_val = STRNCPY_SAFE(DELIMITER_M, sizeof(DELIMITER_M), TAB_M);
             if (ret_val != NVM_SUCCESS) {
                 return ret_val;
             }
@@ -224,7 +224,7 @@ pmwatch_parse_cli (
     // set stdout or fout
     if (file_logging) {
         if (strstr(file_name, ".csv") == NULL) {
-            ret_val = STRNCAT_SAFE(file_name, SMALL_STR_LEN, extension, strlen(extension));
+            ret_val = STRNCAT_SAFE(file_name, SMALL_STR_LEN, extension);
             if (ret_val != NVM_SUCCESS) {
                 return ret_val;
             }
